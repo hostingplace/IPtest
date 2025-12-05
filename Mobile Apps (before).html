@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Informasi Akademik Mahasiswa-IPB</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --primary: #007bff;
+        --primary-dark: #0056b3;
+        --bg-color: #f4f7fa;
+        --text-dark: #333;
+        --text-grey: #888;
+        --nav-height: 70px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background-color: #e0e5ec;
+        display: flex;
+        justify-content: center;
+        height: 100vh; /* Full viewport height */
+        overflow: hidden; /* Prevent body scroll */
+      }
+
+      /* --- Main App Container --- */
+      .app-container {
+        width: 100%;
+        max-width: 414px;
+        background-color: #fff;
+        height: 100%; /* Fill body height */
+        position: relative;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        display: flex; /* Flex Layout */
+        flex-direction: column; /* Vertical stack */
+      }
+
+      /* --- Scrollable Content Area --- */
+      /* Ini adalah kunci agar konten bisa discroll tapi nav tetap diam */
+      .content-scrollable {
+        flex: 1; /* Mengambil sisa ruang yang ada */
+        overflow-y: auto; /* Scroll vertikal aktif di area ini saja */
+        overflow-x: hidden;
+        background: #fff;
+        position: relative;
+        scroll-behavior: smooth;
+      }
+
+      /* Sembunyikan scrollbar tapi tetap bisa scroll (opsional, untuk estetika) */
+      .content-scrollable::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+      }
+
+      /* --- Header & Layout Utils --- */
+      .header {
+        padding: 20px 25px;
+        background: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 10; /* Header sticky di dalam scroll area */
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(5px);
+      }
+      .header-center {
+        justify-content: center !important;
+      }
+
+      .header-center i {
+        position: absolute;
+        right: 25px; /* agar icon tetap di kanan */
+      }
+
+      .header-center .fa-arrow-left {
+        left: 25px; /* agar icon tetap di kiri */
+        right: auto;
+        cursor: pointer;
+      }
+
+      .screen {
+        display: none;
+        animation: fadeIn 0.3s ease;
+        padding-bottom: 20px; /* Space extra di bawah konten */
+      }
+
+      .screen.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+      h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: var(--text-dark);
+      }
+      p {
+        font-size: 12px;
+        color: var(--text-grey);
+      }
+      .wrapper {
+        padding: 0 25px 25px 25px;
+      }
+
+      /* --- Components Styles --- */
+      .profile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .profile-info h1 {
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .avatar img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .card-gradient {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        border-radius: 20px;
+        padding: 20px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3);
+      }
+      .gpa-info h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin: 5px 0;
+      }
+      .gpa-info button {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 10px;
+        cursor: pointer;
+      }
+      .card-actions {
+        display: flex;
+        gap: 10px;
+      }
+      .action-btn {
+        background: rgba(255, 255, 255, 0.2);
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+      .menu-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+      }
+      .icon-box {
+        width: 50px;
+        height: 50px;
+        background: #f0f4f8;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+        font-size: 20px;
+        margin-bottom: 8px;
+        transition: 0.2s;
+      }
+      .menu-item:hover .icon-box {
+        background: #e2e8f0;
+      }
+      .icon-box.blue {
+        background-color: var(--primary);
+        color: white;
+      }
+
+      .schedule-card {
+        background: white;
+        border-radius: 20px;
+        padding: 15px;
+        border: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      .time-badge {
+        width: 50px;
+        height: 50px;
+        border: 2px solid var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+
+      .task-card {
+        border: 1px solid #ddd;
+        border-radius: 15px;
+        padding: 15px;
+        background: white;
+        margin-bottom: 15px;
+      }
+      .task-btn {
+        margin-top: 10px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .banner {
+        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        border-radius: 15px;
+        padding: 15px;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      /* --- CUSTOM SUB-FEATURE STYLES --- */
+      .message-item {
+        border-bottom: 1px solid #eee;
+        padding: 15px 0;
+        cursor: pointer;
+      }
+      .message-item:last-child {
+        border-bottom: none;
+      }
+      .repo-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        cursor: pointer;
+      }
+      .repo-item i {
+        color: #ffa500; /* Warna Folder */
+        font-size: 24px;
+      }
+      .ukt-box {
+        background: #f7f7f7;
+        padding: 15px;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        border-left: 5px solid var(--primary);
+      }
+      .ukt-status {
+        font-weight: 700;
+        color: #28a745;
+      }
+      .notes-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+      .note-card {
+        background: #fff3cd; /* Light Yellow */
+        border-radius: 10px;
+        padding: 15px;
+        min-height: 120px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+      }
+      .note-card h4 {
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: #856404; /* Darker Yellow Text */
+      }
+      .note-card p {
+        font-size: 10px;
+        color: #856404;
+      }
+      .tr-summary-line {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px dashed #eee;
+      }
+      .tr-summary-line span:last-child {
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      /* News & Chart Styles */
+      .search-bar {
+        background: #f4f6f8;
+        border-radius: 10px;
+        padding: 12px 15px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .search-bar input {
+        border: none;
+        background: transparent;
+        width: 100%;
+        margin-left: 10px;
+        outline: none;
+      }
+      .news-slider {
+        display: flex;
+        overflow-x: auto;
+        gap: 15px;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+      }
+      .news-card-lg {
+        min-width: 280px;
+        height: 180px;
+        background-size: cover;
+        border-radius: 15px;
+        position: relative;
+        overflow: hidden;
+        background-color: #ddd;
+      }
+      .news-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        padding: 15px;
+        color: white;
+      }
+      .news-list-item {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+      .news-thumb {
+        width: 100px;
+        height: 70px;
+        border-radius: 10px;
+        object-fit: cover;
+        background-color: #eee;
+      }
+
+      .chart-container {
+        background: white;
+        padding: 10px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        position: relative;
+        height: 200px;
+      }
+      .grades-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+      .grades-table th {
+        text-align: left;
+        padding: 10px;
+        color: white;
+        background: var(--primary);
+      }
+      .grades-table th:first-child {
+        border-top-left-radius: 10px;
+      }
+      .grades-table th:last-child {
+        border-top-right-radius: 10px;
+      }
+      .grades-table td {
+        padding: 12px 10px;
+        border-bottom: 1px solid #eee;
+      }
+      .summary-card {
+        background: white;
+        border-radius: 15px;
+        padding: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-top: 20px;
+      }
+
+      /* Schedule Tabs & Date */
+      .tabs {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+      }
+      .tab {
+        font-weight: 600;
+        color: var(--text-grey);
+        cursor: pointer;
+        white-space: nowrap;
+        padding-bottom: 5px;
+      }
+      .tab.active-tab {
+        color: var(--primary);
+        border-bottom: 2px solid var(--primary);
+      }
+      .date-scroll {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .date-item {
+        min-width: 60px;
+        height: 70px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .date-item.active-date {
+        background: var(--primary);
+        color: white;
+        transform: scale(1.05);
+      }
+      .date-item .day {
+        font-size: 10px;
+      }
+      .date-item .date {
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .empty-state {
+        text-align: center;
+        padding: 40px 0;
+        color: #999;
+      }
+
+      /* Style for Presensi Input */
+      .presensi-form select {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+        background: #f8f9fa;
+      }
+      .presensi-form input[type="number"] {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 2px dashed #007bff;
+        border-radius: 8px;
+        font-size: 24px;
+        text-align: center;
+        letter-spacing: 15px;
+        font-weight: 700;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+      .presensi-form input[type="number"]:focus {
+        border-color: #0056b3;
+      }
+      .presensi-form button {
+        width: 100%;
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 14px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .presensi-form button:hover:not(:disabled) {
+        background-color: #1e7e34;
+      }
+      .presensi-form button:disabled {
+        background-color: #9cd6a9;
+        cursor: not-allowed;
+      }
+      .message-box {
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        display: none;
+        animation: slideIn 0.3s ease;
+      }
+      .message-box.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .message-box.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* --- FIXED BOTTOM NAVIGATION --- */
+      .bottom-nav {
+        width: 100%;
+        height: var(--nav-height);
+        background: white;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-top: 1px solid #eee;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05); /* Bayangan halus ke atas */
+
+        /* Sifat Fixed dalam Flexbox */
+        flex-shrink: 0; /* Jangan menyusut */
+        z-index: 1000;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #ccc;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .nav-item i {
+        font-size: 20px;
+        margin-bottom: 4px;
+      }
+      .nav-item span {
+        font-size: 10px;
+      }
+      .nav-item.active {
+        color: var(--primary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="content-scrollable">
+        <!-- ============================================== -->
+        <!-- SCREEN: HOME (Updated with onclick handlers) -->
+        <!-- ============================================== -->
+        <div id="home" class="screen active">
+          <div class="wrapper" style="padding-top: 25px">
+            <div class="profile-header">
+              <div class="profile-info">
+                <p>1301100310 - Sistem Informasi</p>
+                <h1>
+                  Hai, Gede Wicaksana
+                  <img
+                    src="https://em-content.zobj.net/source/microsoft-teams/337/waving-hand_1f44b.png"
+                    width="18"
+                  />
+                </h1>
+              </div>
+              <div class="avatar">
+                <!-- Image placeholder, since no external assets are allowed -->
+                <img src="wicak-mahasiswa.jpeg" alt="Profile" />
+              </div>
+            </div>
+
+            <div class="card-gradient">
+              <div class="gpa-info">
+                <h4>Indeks Prestasi</h4>
+                <p style="color: rgba(255, 255, 255, 0.8); font-size: 11px">
+                  Semester Lima
+                </p>
+                <h1>
+                  3.53
+                  <span style="font-size: 14px"
+                    ><i class="fas fa-arrow-up"></i
+                  ></span>
+                </h1>
+                <button
+                  onclick="switchTab('hasil', document.querySelector('.nav-item[onclick*=\'switchTab(\'hasil\')\']'))"
+                >
+                  Seluruh Semester <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              <div class="card-actions">
+                <div class="action-btn"><i class="fas fa-bell"></i></div>
+                <div class="action-btn"><i class="fas fa-qrcode"></i></div>
+              </div>
+            </div>
+
+            <div class="menu-grid">
+              <div class="menu-item" onclick="switchTab('kalender', this)">
+                <div class="icon-box"><i class="far fa-calendar-alt"></i></div>
+                <span>Kalender</span>
+              </div>
+              <div class="menu-item" onclick="switchTab('pesan', this)">
+                <div class="icon-box"><i class="far fa-envelope"></i></div>
+                <span>Pesan</span>
+              </div>
+              <div class="menu-item" onclick="switchTab('repositori', this)">
+                <div class="icon-box"><i class="fas fa-book"></i></div>
+                <span>Repositori</span>
+              </div>
+              <!-- Updated Presensi to go to the main Presensi screen -->
+              <div class="menu-item" onclick="switchTab('presensi', this)">
+                <div class="icon-box"><i class="far fa-check-square"></i></div>
+                <span>Presensi</span>
+              </div>
+              <div class="menu-item" onclick="switchTab('ukt', this)">
+                <div class="icon-box"><i class="fas fa-wallet"></i></div>
+                <span>UKT</span>
+              </div>
+              <div class="menu-item" onclick="switchTab('catatan', this)">
+                <div class="icon-box"><i class="far fa-file-alt"></i></div>
+                <span>Catatan</span>
+              </div>
+              <div class="menu-item" onclick="switchTab('transkrip', this)">
+                <div class="icon-box"><i class="fas fa-chart-line"></i></div>
+                <span>Transkrip</span>
+              </div>
+              <div class="menu-item" onclick="switchTab('lainnya', this)">
+                <div class="icon-box blue">
+                  <i class="fas fa-ellipsis-h"></i>
+                </div>
+                <span>Lainnya</span>
+              </div>
+            </div>
+
+            <h3>Jadwal Hari Ini</h3>
+            <div class="schedule-card">
+              <div class="time-badge">8.30</div>
+              <div class="class-info">
+                <h4>Sistem Operasi</h4>
+                <p><i class="fas fa-map-marker-alt"></i> Ruang AM 201</p>
+                <p>
+                  <i class="fas fa-user"></i> Dosen Asep Taufik, S.T., M.T.I
+                </p>
+              </div>
+            </div>
+
+            <h3>Informasi Kuliah</h3>
+            <div class="banner">
+              <i class="fas fa-bullhorn"></i>
+              <div>
+                <h4 style="font-size: 14px; margin-bottom: 2px">
+                  Beasiswa Magang
+                </h4>
+                <p style="color: white; font-size: 11px">
+                  Bersertifikat di Perusahaan BUMN
+                </p>
+              </div>
+            </div>
+            <div style="height: 20px"></div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN: BERITA -->
+        <!-- ... (Konten lainnya tetap sama) ... -->
+        <!-- ============================================== -->
+        <div id="berita" class="screen">
+          <div class="header header-center">
+            <h2>Berita</h2>
+            <i class="fas fa-bell"></i>
+          </div>
+          <div class="wrapper">
+            <div class="search-bar">
+              <i class="fas fa-search" style="color: #ccc"></i>
+              <input type="text" placeholder="Cari Berita, Pengumuman..." />
+            </div>
+
+            <h3>Berita Terbaru</h3>
+            <div class="news-slider">
+              <div
+                class="news-card-lg"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');
+                "
+              >
+                <div class="news-overlay">
+                  <h4 style="font-size: 14px">
+                    Alur Yudisium dan Wisuda Agustus 2021
+                  </h4>
+                  <p>19 Juli 2021</p>
+                </div>
+              </div>
+              <div
+                class="news-card-lg"
+                style="
+                  background-image: url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');
+                "
+              >
+                <div class="news-overlay">
+                  <h4 style="font-size: 14px">Seminar Teknologi</h4>
+                  <p>20 Juli 2021</p>
+                </div>
+              </div>
+            </div>
+
+            <h3>Berita Lainnya</h3>
+            <div class="news-list-item">
+              <img
+                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=60"
+                class="news-thumb"
+              />
+              <div>
+                <h4
+                  style="font-size: 13px; font-weight: 600; margin-bottom: 5px"
+                >
+                  Alur Pendaftaran Ujian Seminar Proposal
+                </h4>
+                <p>
+                  2 Juli 2021
+                  <span
+                    style="
+                      color: var(--primary);
+                      font-weight: 600;
+                      float: right;
+                    "
+                    >Lihat Lebih ></span
+                  >
+                </p>
+              </div>
+            </div>
+            <div class="news-list-item">
+              <img
+                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=60"
+                class="news-thumb"
+              />
+              <div>
+                <h4
+                  style="font-size: 13px; font-weight: 600; margin-bottom: 5px"
+                >
+                  Pemberitahuan Her-Registrasi Semester
+                </h4>
+                <p>
+                  21 Juni 2021
+                  <span
+                    style="
+                      color: var(--primary);
+                      font-weight: 600;
+                      float: right;
+                    "
+                    >Lihat Lebih ></span
+                  >
+                </p>
+              </div>
+            </div>
+            <div style="margin-top: 20px; color: #ccc; text-align: center">
+              --- Akhir Berita ---
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN: HASIL STUDI -->
+        <!-- ... (Konten lainnya tetap sama) ... -->
+        <!-- ============================================== -->
+        <div id="hasil" class="screen">
+          <div class="header header-center">
+            <h2>Hasil Studi</h2>
+            <i class="fas fa-download"></i>
+          </div>
+          <div class="wrapper">
+            <h3>Statistik Indeks Prestasi</h3>
+            <div class="chart-container">
+              <canvas id="gpaChart"></canvas>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+              "
+            >
+              <h3>Nilai Semester</h3>
+              <select
+                style="
+                  padding: 5px;
+                  border-radius: 5px;
+                  border: 1px solid #ddd;
+                  font-size: 12px;
+                "
+              >
+                <option>Semester 5</option>
+                <option>Semester 4</option>
+              </select>
+            </div>
+
+            <table class="grades-table">
+              <thead>
+                <tr>
+                  <th>Mata Kuliah</th>
+                  <th style="text-align: center">Nilai</th>
+                  <th style="text-align: center">Bobot</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Sistem Operasi</td>
+                  <td style="text-align: center; font-weight: bold">A</td>
+                  <td style="text-align: center">4.00</td>
+                </tr>
+                <tr>
+                  <td>Statistika/Probabilitas</td>
+                  <td style="text-align: center; font-weight: bold">B</td>
+                  <td style="text-align: center">3.00</td>
+                </tr>
+                <tr>
+                  <td>Strategi Sistem</td>
+                  <td style="text-align: center; font-weight: bold">B</td>
+                  <td style="text-align: center">3.00</td>
+                </tr>
+                <tr>
+                  <td>Organisasi Komputer</td>
+                  <td style="text-align: center; font-weight: bold">A</td>
+                  <td style="text-align: center">4.00</td>
+                </tr>
+                <tr>
+                  <td>Basis Data Lanjut</td>
+                  <td style="text-align: center; font-weight: bold">A</td>
+                  <td style="text-align: center">4.00</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="summary-card">
+              <div class="profile-header" style="margin-bottom: 0">
+                <div>
+                  <h4 style="margin-bottom: 10px">Keterangan Studi</h4>
+                  <p style="font-size: 13px; color: #333; margin-bottom: 5px">
+                    Total SKS
+                    <span style="float: right; font-weight: bold">120</span>
+                  </p>
+                  <p style="font-size: 13px; color: #333; margin-bottom: 5px">
+                    Total Semester
+                    <span style="float: right; font-weight: bold">Lima</span>
+                  </p>
+                  <p style="font-size: 13px; color: #333">
+                    IPK Kumulatif
+                    <span
+                      style="
+                        float: right;
+                        font-weight: bold;
+                        color: var(--primary);
+                      "
+                      >3.21</span
+                    >
+                  </p>
+                </div>
+                <i
+                  class="fas fa-university"
+                  style="font-size: 30px; color: #eee"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN: JADWAL AKADEMIK -->
+        <!-- ... (Konten lainnya tetap sama) ... -->
+        <!-- ============================================== -->
+        <div id="jadwal" class="screen">
+          <div class="header">
+            <h2>Jadwal Akademik</h2>
+            <i class="fas fa-filter"></i>
+          </div>
+          <div class="wrapper">
+            <div class="tabs">
+              <div
+                class="tab active-tab"
+                onclick="selectScheduleTab('kuliah', this)"
+              >
+                Kuliah
+              </div>
+              <div class="tab" onclick="selectScheduleTab('tugas', this)">
+                Tugas
+              </div>
+              <div class="tab" onclick="selectScheduleTab('ujian', this)">
+                Ujian
+              </div>
+            </div>
+
+            <div id="date-scroll-container" class="date-scroll">
+              <div
+                class="date-item active-date"
+                onclick="selectDay('senin', this)"
+              >
+                <span class="day">Senin</span>
+                <span class="date">13</span>
+              </div>
+              <div class="date-item" onclick="selectDay('selasa', this)">
+                <span class="day">Selasa</span>
+                <span class="date">14</span>
+              </div>
+              <div class="date-item" onclick="selectDay('rabu', this)">
+                <span class="day">Rabu</span>
+                <span class="date">15</span>
+              </div>
+              <div class="date-item" onclick="selectDay('kamis', this)">
+                <span class="day">Kamis</span>
+                <span class="date">16</span>
+              </div>
+              <div class="date-item" onclick="selectDay('jumat', this)">
+                <span class="day">Jumat</span>
+                <span class="date">17</span>
+              </div>
+            </div>
+
+            <h3 id="schedule-title">Jadwal Kuliah (Senin)</h3>
+
+            <div id="schedule-content"></div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- NEW SCREEN: 1. KALENDER AKADEMIK -->
+        <!-- ... (Konten lainnya tetap sama) ... -->
+        <!-- ============================================== -->
+        <div id="kalender" class="screen">
+          <div class="header header-center">
+            <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
+            <h2>Kalender Akademik</h2>
+          </div>
+          <div class="wrapper">
+            <h3>November 2025</h3>
+            <div style="text-align: center; margin-bottom: 20px">
+              <!-- Placeholder for a simple calendar graphic -->
+              <img
+                src="https://placehold.co/300x200/f0f4f8/888?text=Kalender+Sederhana"
+                alt="Kalender"
+                style="border-radius: 10px"
+              />
+            </div>
+
+            <h3>Agenda Penting</h3>
+            <div class="schedule-card" style="border-left: 5px solid #ffc107">
+              <div class="class-info">
+                <h4>Batas Akhir Pembayaran UKT</h4>
+                <p><i class="far fa-calendar-alt"></i> 25 November 2025</p>
+                <p>
+                  <i
+                    class="fas fa-exclamation-triangle"
+                    style="color: #ffc107"
+                  ></i>
+                  Wajib bayar untuk registrasi semester ganjil.
+                </p>
+              </div>
+            </div>
+            <div class="schedule-card" style="border-left: 5px solid #28a745">
+              <div class="class-info">
+                <h4>Pengumuman Beasiswa PPA</h4>
+                <p><i class="far fa-calendar-alt"></i> 1 Desember 2025</p>
+                <p>
+                  <i class="fas fa-info-circle" style="color: #28a745"></i> Cek
+                  laman berita kampus untuk detail penerima.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- NEW SCREEN: 2. PESAN -->
+        <!-- ... (Konten lainnya tetap sama) ... -->
+        <!-- ============================================== -->
+        <div id="pesan" class="screen">
+          <div class="header header-center">
+            <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
+            <h2>Pesan (Kotak Masuk)</h2>
+            <i class="fas fa-pen-square"></i>
+          </div>
+          <div class="wrapper">
+            <h3>Pesan Belum Dibaca</h3>
+            <div
+              class="message-item"
+              style="background: #f8f9fa; border-radius: 5px; padding: 10px 0"
+            >
+              <h4
+                style="
+                  font-size: 14px;
+                  font-weight: 700;
+                  color: #333;
+                  margin-bottom: 5px;
+                "
+              >
+                Dr. Angga Wirayudha (Dosen Wali)
+              </h4>
+              <p style="color: #333; font-weight: 500">
+                Perkembangan Studi: Jadwal bimbingan diundur.
+              </p>
+              <p
+                style="
+                  font-size: 10px;
+                  margin-top: 5px;
+                  float: right;
+                  color: #007bff;
+                "
+              >
+                15.30 WIB
+              </p>
+            </div>
+
+            <h3>Arsip Pesan</h3>
+            <div class="message-item">
+              <h4
+                style="
+                  font-size: 14px;
+                  font-weight: 600;
+                  color: #555;
+                  margin-bottom: 5px;
+                "
+              >
+                Admin Akademik
+              </h4>
+              <p style="color: #888">
+                Peringatan KHS: Cek hasil studi semester genap.
+              </p>
+              <p
+                style="
+                  font-size: 10px;
+                  margin-top: 5px;
+                  float: right;
+                  color: #888;
+                "
+              >
+                20/07/2025
+              </p>
+            </div>
+            <div class="message-item">
+              <h4
+                style="
+                  font-size: 14px;
+                  font-weight: 600;
+                  color: #555;
+                  margin-bottom: 5px;
+                "
+              >
+                Pengelola UKT
+              </h4>
+              <p style="color: #888">
+                Tagihan UKT: Pembayaran sudah dikonfirmasi.
+              </p>
+              <p
+                style="
+                  font-size: 10px;
+                  margin-top: 5px;
+                  float: right;
+                  color: #888;
+                "
+              >
+                10/01/2025
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- NEW SCREEN: 3. REPOSITORI -->
+        <!-- ... (Konten lainnya tetap sama) ... -->
+        <!-- ============================================== -->
+        <div id="repositori" class="screen">
+          <div class="header header-center">
+            <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
+            <h2>Repositori Materi</h2>
+            <i class="fas fa-cloud-download-alt"></i>
+          </div>
+          <div class="wrapper">
+            <div class="search-bar">
+              <i class="fas fa-search" style="color: #ccc"></i>
+              <input type="text" placeholder="Cari Mata Kuliah atau File..." />
+            </div>
+
+            <h3>Semester 5 (Ganjil)</h3>
+            <div class="repo-item">
+              <i class="fas fa-folder"></i>
+              <div>
+                <h4 style="font-size: 14px; font-weight: 600; color: #333">
+                  Sistem Operasi (SO)
+                </h4>
+                <p style="font-size: 11px">12 File, 4 Folder</p>
+              </div>
+            </div>
+            <div class="repo-item">
+              <i class="fas fa-folder"></i>
+              <div>
+                <h4 style="font-size: 14px; font-weight: 600; color: #333">
+                  Basis Data Lanjut
+                </h4>
+                <p style="font-size: 11px">8 File, 2 Folder</p>
+              </div>
+            </div>
+
+            <h3>Semester 4 (Genap)</h3>
+            <div class="repo-item">
+              <i class="fas fa-folder"></i>
+              <div>
+                <h4 style="font-size: 14px; font-weight: 600; color: #333">
+                  Pemrograman Mobile
+                </h4>
+                <p style="font-size: 11px">15 File, 6 Folder</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- NEW SCREEN: 4. PRESENSI (Main Switch Screen) -->
+        <!-- ============================================== -->
+        <div id="presensi" class="screen">
+          <div class="header header-center">
+            <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
+            <h2 id="presensi-title">Presensi Akademik</h2>
+            <i
+              class="fas fa-sync-alt"
+              onclick="switchPresensiView('status')"
+            ></i>
+          </div>
+          <div class="wrapper">
+            <!-- Tabs to switch between Status and Input -->
+            <div class="tabs">
+              <div
+                id="tab-status"
+                class="tab active-tab"
+                onclick="switchPresensiView('status', this)"
+              >
+                Status Kehadiran
+              </div>
+              <div
+                id="tab-input"
+                class="tab"
+                onclick="switchPresensiView('input', this)"
+              >
+                Input Presensi
+              </div>
+            </div>
+
+            <!-- 4A. STATUS PRESENSI VIEW (Default) -->
+            <div id="presensi-status-view">
+              <h3>Semester Berjalan (Ganjil 2025)</h3>
+              <table class="grades-table" style="font-size: 13px">
+                <thead>
+                  <tr>
+                    <th style="background: #00897b">Mata Kuliah</th>
+                    <th style="text-align: center; background: #00897b">
+                      Total Absen
+                    </th>
+                    <th style="text-align: center; background: #00897b">
+                      Persentase
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Sistem Operasi</td>
+                    <td style="text-align: center">1x</td>
+                    <td
+                      style="
+                        text-align: center;
+                        color: #ff9800;
+                        font-weight: 700;
+                      "
+                    >
+                      88%
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Strategi Sistem</td>
+                    <td style="text-align: center">0x</td>
+                    <td
+                      style="
+                        text-align: center;
+                        color: #28a745;
+                        font-weight: 700;
+                      "
+                    >
+                      100%
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Organisasi Komputer</td>
+                    <td style="text-align: center">2x</td>
+                    <td
+                      style="
+                        text-align: center;
+                        color: #dc3545;
+                        font-weight: 700;
+                      "
+                    >
+                      75%
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Basis Data Lanjut</td>
+                    <td style="text-align: center">0x</td>
+                    <td
+                      style="
+                        text-align: center;
+                        color: #28a745;
+                        font-weight: 700;
+                      "
+                    >
+                      100%
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div
+                class="summary-card"
+                style="
+                  margin-top: 15px;
+                  background: #fce4ec;
+                  border: 1px solid #dc3545;
+                "
+              >
+                <p style="font-size: 11px; color: #dc3545; font-weight: 600">
+                  <i class="fas fa-exclamation-circle"></i> Perhatian:
+                  Organisasi Komputer di bawah batas minimum (80%). Hubungi
+                  Dosen segera.
+                </p>
+              </div>
+            </div>
+
+            <!-- 4B. INPUT PRESENSI VIEW (Hidden by default) -->
+            <div id="presensi-input-view" style="display: none">
+              <p style="margin-bottom: 20px">
+                Pilih mata kuliah yang sedang berlangsung dan masukkan kode
+                presensi 4 digit yang diberikan oleh Dosen.
+              </p>
+
+              <form class="presensi-form" onsubmit="submitPresensi(event)">
+                <label
+                  style="
+                    font-weight: 600;
+                    font-size: 13px;
+                    display: block;
+                    margin-bottom: 5px;
+                  "
+                  >Pilih Mata Kuliah</label
+                >
+                <select
+                  id="matkul-select"
+                  required
+                  onchange="updatePresensiStatus()"
+                >
+                  <option value="" disabled selected>
+                    -- Pilih Jadwal Hari Ini --
+                  </option>
+                  <!-- Opsi akan diisi oleh JavaScript berdasarkan jadwal hari ini -->
+                </select>
+
+                <label
+                  style="
+                    font-weight: 600;
+                    font-size: 13px;
+                    display: block;
+                    margin-bottom: 5px;
+                  "
+                  >Kode Presensi (4 Digit)</label
+                >
+                <input
+                  type="number"
+                  id="presensi-code"
+                  placeholder="____"
+                  maxlength="4"
+                  required
+                  oninput="this.value=this.value.slice(0,this.maxLength)"
+                  pattern="\d{4}"
+                />
+
+                <button type="submit" id="submit-presensi-btn" disabled>
+                  <i class="fas fa-paper-plane"></i> Kirim Presensi
+                </button>
+              </form>
+
+              <div id="presensi-message" class="message-box"></div>
+
+              <div
+                class="summary-card"
+                style="margin-top: 25px; background: #f0f8ff"
+              >
+                <h4
+                  style="
+                    font-size: 14px;
+                    margin-bottom: 10px;
+                    color: var(--primary);
+                  "
+                >
+                  Tips Kehadiran
+                </h4>
+                <p style="font-size: 12px">
+                  Pastikan Anda berada di area kampus/ruangan yang ditentukan
+                  saat melakukan presensi (validasi lokasi GPS simulasi).
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- NEW SCREEN: 5. UKT -->
+        <!-- ... (Konten lainnya tetap sama) ... -->
+        <!-- ============================================== -->
+        <div id="ukt" class="screen">
+          <div class="header header-center">
+            <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
+            <h2>Informasi UKT & Pembayaran</h2>
+            <i class="fas fa-history"></i>
+          </div>
+          <div class="wrapper">
+            <h3>Tagihan Semester Ganjil 2025/2026</h3>
+            <div class="ukt-box">
+              <p style="font-size: 12px; color: #555">Kategori UKT</p>
+              <h4
+                style="
+                  font-size: 16px;
+                  font-weight: 700;
+                  color: #333;
+                  margin-bottom: 10px;
+                "
+              >
+                UKT Golongan III
+              </h4>
+
+              <p style="font-size: 13px; color: #333; margin-bottom: 5px">
+                Jumlah Tagihan
+                <span style="float: right; font-weight: bold"
+                  >Rp 5.500.000</span
+                >
+              </p>
+              <p style="font-size: 13px; color: #333; margin-bottom: 10px">
+                Batas Waktu Bayar
+                <span style="float: right; font-weight: bold; color: #dc3545"
+                  >25 Nov 2025</span
+                >
+              </p>
+              <p style="font-size: 14px; font-weight: 700">
+                Status
+                <span class="ukt-status" style="float: right; color: #dc3545"
+                  >BELUM LUNAS</span
+                >
+              </p>
+            </div>
+            <button
+              style="
+                width: 100%;
+                background: var(--primary);
+                color: white;
+                border: none;
+                padding: 12px;
+                border-radius: 10px;
+                font-weight: 600;
+                cursor: pointer;
+              "
+            >
+              Lakukan Pembayaran
+            </button>
+
+            <h3 style="margin-top: 30px">Riwayat Pembayaran</h3>
+            <div
+              class="ukt-box"
+              style="
+                border-left: 5px solid #28a745;
+                margin-bottom: 10px;
+                background: #e8f5e9;
+              "
+            >
+              <p style="font-size: 14px; font-weight: 600; color: #333">
+                Semester Genap 2024/2025
+              </p>
+              <p style="font-size: 11px; color: #28a745">LUNAS (12 Jan 2025)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- NEW SCREEN: 6. CATATAN -->
+        <!-- ... (Konten lainnya tetap sama) ... -->
+        <!-- ============================================== -->
+        <div id="catatan" class="screen">
+          <div class="header header-center">
+            <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
+            <h2>Catatan Kuliah</h2>
+            <i class="fas fa-plus-circle"></i>
+          </div>
+          <div class="wrapper">
+            <h3>Catatan Terbaru</h3>
+            <div class="notes-list">
+              <div class="note-card">
+                <h4>Strategi Sistem</h4>
+                <p>
+                  Draft bab 1 proposal skripsi sudah selesai, perlu revisi
+                  bagian landasan teori.
+                </p>
+                <p style="margin-top: 10px">2 Jam Lalu</p>
+              </div>
+              <div class="note-card" style="background: #e3f2fd">
+                <h4 style="color: #0d47a1">Basis Data Lanjut</h4>
+                <p style="color: #0d47a1">
+                  Perbedaan NoSQL vs SQL: CAP theorem dan contoh MongoDB.
+                </p>
+                <p style="margin-top: 10px; color: #0d47a1">Kemarin</p>
+              </div>
+            </div>
+
+            <h3 style="margin-top: 30px">Semua Catatan (52)</h3>
+            <div class="repo-item" style="border-left: 5px solid #ff9800">
+              <i class="far fa-sticky-note" style="color: #ff9800"></i>
+              <div>
+                <h4 style="font-size: 14px; font-weight: 600; color: #333">
+                  Sistem Operasi
+                </h4>
+                <p style="font-size: 11px">10 Catatan</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- NEW SCREEN: 7. TRANSKRIP -->
+        <!-- ... (Konten lainnya tetap sama) ... -->
+        <!-- ============================================== -->
+        <div id="transkrip" class="screen">
+          <div class="header header-center">
+            <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
+            <h2>Transkrip Nilai Sementara</h2>
+            <i class="fas fa-print"></i>
+          </div>
+          <div class="wrapper">
+            <div
+              class="ukt-box"
+              style="border-left: 5px solid #28a745; padding: 20px"
+            >
+              <p style="font-size: 14px; color: #555">
+                Indeks Prestasi Kumulatif (IPK)
+              </p>
+              <h1 style="font-size: 36px; font-weight: 700; color: #28a745">
+                3.21
+              </h1>
+              <div
+                class="tr-summary-line"
+                style="
+                  border-top: 1px dashed #ccc;
+                  margin-top: 15px;
+                  padding-top: 15px;
+                "
+              >
+                <span>Total SKS Lulus</span>
+                <span>120 SKS</span>
+              </div>
+              <div class="tr-summary-line">
+                <span>Status Studi</span>
+                <span>Aktif</span>
+              </div>
+            </div>
+
+            <h3 style="margin-top: 30px">Daftar Nilai Kumulatif</h3>
+            <table class="grades-table" style="font-size: 13px">
+              <thead>
+                <tr>
+                  <th style="background: #00897b">Mata Kuliah</th>
+                  <th style="text-align: center; background: #00897b">SKS</th>
+                  <th style="text-align: center; background: #00897b">Nilai</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Algoritma dan Struktur Data</td>
+                  <td style="text-align: center">3</td>
+                  <td style="text-align: center; font-weight: bold">A</td>
+                </tr>
+                <tr>
+                  <td>Matematika Diskrit</td>
+                  <td style="text-align: center">3</td>
+                  <td style="text-align: center; font-weight: bold">B+</td>
+                </tr>
+                <tr>
+                  <td>Sistem Operasi</td>
+                  <td style="text-align: center">3</td>
+                  <td style="text-align: center; font-weight: bold">A</td>
+                </tr>
+                <tr>
+                  <td>Statistika/Probabilitas</td>
+                  <td style="text-align: center">3</td>
+                  <td style="text-align: center; font-weight: bold">B</td>
+                </tr>
+                <tr>
+                  <td>Pemrograman Web</td>
+                  <td style="text-align: center">3</td>
+                  <td style="text-align: center; font-weight: bold">A</td>
+                </tr>
+                <!-- Dst. -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- NEW SCREEN: 8. LAINNYA (Placeholder) -->
+        <!-- ... (Konten lainnya tetap sama) ... -->
+        <!-- ============================================== -->
+        <div id="lainnya" class="screen">
+          <div class="header header-center">
+            <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
+            <h2>Fitur Lainnya</h2>
+          </div>
+          <div class="wrapper">
+            <p style="font-size: 14px; color: #333">
+              Halaman ini akan berisi menu-menu tambahan seperti Pengaturan
+              Akun, Bantuan, Logout, dan Informasi Kampus Lainnya.
+            </p>
+            <div style="margin-top: 20px; text-align: center; color: #ccc">
+              <i
+                class="fas fa-wrench"
+                style="font-size: 40px; margin-bottom: 10px; color: #ddd"
+              ></i>
+              <p>Dalam Pengembangan</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('home', this)">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('berita', this)">
+          <i class="far fa-newspaper"></i>
+          <span>Berita</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('hasil', this)">
+          <i class="fas fa-chart-bar"></i>
+          <span>Hasil Studi</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('jadwal', this)">
+          <i class="far fa-calendar-alt"></i>
+          <span>Jadwal</span>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+      // Data dummy jadwal hari ini (Senin) untuk keperluan Input Presensi
+      const todaySchedule = [
+        {
+          id: "so",
+          matkul: "Sistem Operasi",
+          time: "08.30",
+          code: "1357",
+          room: "AM 201",
+        },
+        {
+          id: "ss",
+          matkul: "Strategi Sistem",
+          time: "11.00",
+          code: "2468",
+          room: "AM 201",
+        },
+        // Tambahkan mata kuliah lain yang sedang berlangsung jika hari ini bukan Senin
+      ];
+
+      // --- 1. Navigation Logic ---
+      function switchTab(screenId, clickedElement) {
+        const screens = document.querySelectorAll(".screen");
+        screens.forEach((screen) => screen.classList.remove("active"));
+
+        document.getElementById(screenId).classList.add("active");
+
+        const navItems = document.querySelectorAll(".nav-item");
+        const isBottomNavClick =
+          clickedElement && clickedElement.classList.contains("nav-item");
+
+        if (isBottomNavClick) {
+          navItems.forEach((item) => item.classList.remove("active"));
+          clickedElement.classList.add("active");
+        } else {
+          navItems.forEach((item) => item.classList.remove("active"));
+          const homeNav = document.querySelector(
+            ".nav-item[onclick*=\"switchTab('home')\"]"
+          );
+          if (homeNav) homeNav.classList.add("active");
+        }
+
+        document.querySelector(".content-scrollable").scrollTop = 0;
+
+        if (screenId === "jadwal") {
+          renderScheduleContent();
+        }
+        if (screenId === "presensi") {
+          // Set default view to status when navigating to Presensi screen
+          switchPresensiView("status");
+          populateMatkulOptions();
+        }
+      }
+
+      // --- 2. Chart Logic ---
+      const ctx = document.getElementById("gpaChart").getContext("2d");
+      let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+      gradient.addColorStop(0, "rgba(0, 123, 255, 0.5)");
+      gradient.addColorStop(1, "rgba(0, 123, 255, 0.0)");
+
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5"],
+          datasets: [
+            {
+              label: "Indeks Prestasi",
+              data: [1.5, 2.4, 3.0, 2.4, 3.53],
+              borderColor: "#007bff",
+              backgroundColor: gradient,
+              borderWidth: 2,
+              pointBackgroundColor: "#fff",
+              pointBorderColor: "#007bff",
+              pointRadius: 4,
+              fill: true,
+              tension: 0.4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, max: 4.0, grid: { borderDash: [5, 5] } },
+            x: { grid: { display: false } },
+          },
+        },
+      });
+
+      // --- 3. SCHEDULE LOGIC (Sama seperti sebelumnya) ---
+      const scheduleData = {
+        kuliah: {
+          senin: [
+            {
+              time: "08.30",
+              matkul: "Sistem Operasi",
+              room: "Ruang AM 201",
+              dosen: "Dosen Asep Taufik, S.T., M.T.I",
+            },
+            {
+              time: "11.00",
+              matkul: "Strategi Sistem",
+              room: "Ruang AM 201",
+              dosen: "Dosen Maulana, S.T., M.T.I",
+            },
+          ],
+          selasa: [
+            {
+              time: "09.00",
+              matkul: "Big Data",
+              room: "Lab Komputer 3",
+              dosen: "Dr. Budi Santoso, M.Kom",
+            },
+            {
+              time: "13.00",
+              matkul: "Keamanan Informasi",
+              room: "Ruang AM 302",
+              dosen: "Siti Aminah, M.Cs",
+            },
+          ],
+          rabu: [
+            {
+              time: "08.00",
+              matkul: "Pemrograman Web Lanjut",
+              room: "Lab Multimedia",
+              dosen: "Rizky Pratama, S.Kom",
+            },
+            {
+              time: "10.30",
+              matkul: "Etika Profesi",
+              room: "Ruang B 101",
+              dosen: "Prof. Hendra Gunawan",
+            },
+          ],
+          kamis: [
+            {
+              time: "10.00",
+              matkul: "Jaringan Komputer",
+              room: "Lab Jaringan",
+              dosen: "Agus Setiawan, M.T",
+            },
+            {
+              time: "14.00",
+              matkul: "Riset Operasi",
+              room: "Ruang C 205",
+              dosen: "Dewi Lestari, M.Si",
+            },
+          ],
+          jumat: [
+            {
+              time: "09.00",
+              matkul: "Kewirausahaan",
+              room: "Aula Utama",
+              dosen: "Bambang Pamungkas, M.M",
+            },
+            {
+              time: "13.30",
+              matkul: "Bahasa Inggris Bisnis",
+              room: "Lab Bahasa",
+              dosen: "Miss Jessica",
+            },
+          ],
+        },
+        tugas: [
+          {
+            matkul: "Sistem Operasi",
+            title: "Laporan Praktikum Modul 4",
+            deadline: "Senin, 13 Nov 2021",
+          },
+          {
+            matkul: "Big Data",
+            title: "Analisis Dataset Kaggle",
+            deadline: "Rabu, 15 Nov 2021",
+          },
+          {
+            matkul: "Pemrograman Web",
+            title: "Membuat REST API",
+            deadline: "Jumat, 17 Nov 2021",
+          },
+        ],
+        ujian: [
+          {
+            date: "Senin, 05 Jan 2026",
+            time: "08.00 - 10.00",
+            matkul: "Sistem Operasi",
+            type: "Ujian Akhir Semester",
+          },
+          {
+            date: "Rabu, 07 Jan 2026",
+            time: "10.00 - 12.00",
+            matkul: "Big Data",
+            type: "Ujian Akhir Semester",
+          },
+          {
+            date: "Jumat, 09 Jan 2026",
+            time: "08.00 - 10.00",
+            matkul: "Pemrograman Web",
+            type: "Ujian Akhir Semester",
+          },
+          {
+            date: "Senin, 12 Jan 2026",
+            time: "13.00 - 15.00",
+            matkul: "Keamanan Informasi",
+            type: "Ujian Akhir Semester",
+          },
+        ],
+      };
+
+      let currentCategory = "kuliah";
+      let currentDay = "senin";
+
+      function selectScheduleTab(category, el) {
+        currentCategory = category;
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active-tab"));
+        el.classList.add("active-tab");
+
+        const scrollContainer = document.getElementById(
+          "date-scroll-container"
+        );
+        if (category === "kuliah") {
+          scrollContainer.classList.remove("hidden");
+        } else {
+          scrollContainer.classList.add("hidden");
+        }
+        renderScheduleContent();
+      }
+
+      function selectDay(day, el) {
+        currentDay = day;
+        document
+          .querySelectorAll(".date-item")
+          .forEach((d) => d.classList.remove("active-date"));
+        el.classList.add("active-date");
+        renderScheduleContent();
+      }
+
+      function renderScheduleContent() {
+        const container = document.getElementById("schedule-content");
+        const titleEl = document.getElementById("schedule-title");
+        let html = "";
+
+        if (currentCategory === "kuliah") {
+          titleEl.innerText = `Jadwal Kuliah (${
+            currentDay.charAt(0).toUpperCase() + currentDay.slice(1)
+          })`;
+          const classes = scheduleData.kuliah[currentDay];
+          if (classes && classes.length > 0) {
+            classes.forEach((c) => {
+              html += `
+                        <div class="schedule-card">
+                            <div class="time-badge">${c.time}</div>
+                            <div class="class-info">
+                                <h4>${c.matkul}</h4>
+                                <p><i class="fas fa-map-marker-alt"></i> ${c.room}</p>
+                                <p><i class="fas fa-user"></i> ${c.dosen}</p>
+                            </div>
+                        </div>`;
+            });
+          } else {
+            html =
+              '<div class="empty-state">Tidak ada jadwal kuliah hari ini.</div>';
+          }
+        } else if (currentCategory === "tugas") {
+          titleEl.innerText = "Daftar Tugas Tertunda";
+          scheduleData.tugas.forEach((t) => {
+            html += `
+                    <div class="task-card">
+                        <h4>${t.matkul}</h4>
+                        <p style="font-size:13px; color:#333;">${t.title}</p>
+                        <p style="font-size:12px; color:#888; margin-top:5px;"><i class="far fa-clock"></i> Tenggat: ${t.deadline}</p>
+                        <button class="task-btn">Detail Tugas</button>
+                    </div>`;
+          });
+        } else if (currentCategory === "ujian") {
+          titleEl.innerText = "Jadwal UAS (Semester Gasal)";
+          scheduleData.ujian.forEach((u) => {
+            html += `
+                    <div class="schedule-card" style="border-left: 4px solid #dc3545;">
+                        <div class="class-info" style="width:100%">
+                            <div style="display:flex; justify-content:space-between;">
+                                <h4 style="color:#dc3545;">${u.matkul}</h4>
+                                <span style="font-size:10px; background:#ffebee; color:#dc3545; padding:3px 8px; border-radius:10px;">${u.type}</span>
+                            </div>
+                            <p style="margin-top:8px; font-weight:600;"><i class="far fa-calendar"></i> ${u.date}</p>
+                            <p><i class="far fa-clock"></i> ${u.time}</p>
+                        </div>
+                    </div>`;
+          });
+        }
+        container.innerHTML = html;
+      }
+
+      renderScheduleContent();
+
+      // --- 4. PRESENSI LOGIC ---
+
+      // Fungsi untuk mengisi dropdown mata kuliah
+      function populateMatkulOptions() {
+        const select = document.getElementById("matkul-select");
+        // Clear options first, keep the default one
+        select.innerHTML =
+          '<option value="" disabled selected>-- Pilih Jadwal Hari Ini --</option>';
+
+        if (todaySchedule.length > 0) {
+          todaySchedule.forEach((sch) => {
+            const option = document.createElement("option");
+            option.value = sch.code; // Use code as value for easy lookup
+            option.innerText = `${sch.matkul} (${sch.time} - ${sch.room})`;
+            option.setAttribute("data-matkul", sch.matkul);
+            select.appendChild(option);
+          });
+        } else {
+          const option = document.createElement("option");
+          option.value = "";
+          option.disabled = true;
+          option.innerText = "Tidak ada jadwal kuliah hari ini.";
+          select.appendChild(option);
+          document.getElementById("submit-presensi-btn").disabled = true;
+        }
+      }
+
+      // Fungsi untuk mengaktifkan/menonaktifkan tombol kirim
+      function updatePresensiStatus() {
+        const matkulSelected =
+          document.getElementById("matkul-select").value !== "";
+        const codeInput = document.getElementById("presensi-code");
+        const submitBtn = document.getElementById("submit-presensi-btn");
+
+        // Mengaktifkan tombol jika mata kuliah terpilih dan kode memiliki 4 digit
+        const isCodeValid = codeInput.value.length === 4;
+        submitBtn.disabled = !(matkulSelected && isCodeValid);
+      }
+
+      // Event listener untuk input kode
+      document
+        .getElementById("presensi-code")
+        .addEventListener("input", updatePresensiStatus);
+
+      // Fungsi untuk menangani proses pengiriman presensi
+      function submitPresensi(event) {
+        event.preventDefault(); // Mencegah form reload page
+
+        const matkulSelect = document.getElementById("matkul-select");
+        const presensiCodeInput = document.getElementById("presensi-code");
+        const messageBox = document.getElementById("presensi-message");
+
+        const selectedCode = matkulSelect.value;
+        const enteredCode = presensiCodeInput.value;
+        const selectedMatkul =
+          matkulSelect.options[matkulSelect.selectedIndex].getAttribute(
+            "data-matkul"
+          );
+
+        messageBox.style.display = "none"; // Sembunyikan pesan lama
+
+        // Simulasi Validasi Kode
+        if (enteredCode === selectedCode) {
+          // Kode Benar
+          messageBox.classList.remove("error");
+          messageBox.classList.add("success");
+          messageBox.innerHTML = `<i class="fas fa-check-circle"></i> **SUKSES!** Kehadiran untuk mata kuliah **${selectedMatkul}** berhasil direkam.`;
+
+          // Reset Form setelah sukses
+          matkulSelect.value = "";
+          presensiCodeInput.value = "";
+          updatePresensiStatus();
+        } else {
+          // Kode Salah
+          messageBox.classList.remove("success");
+          messageBox.classList.add("error");
+          messageBox.innerHTML = `<i class="fas fa-times-circle"></i> **GAGAL!** Kode presensi tidak valid. Cek kembali kode 4 digit Anda.`;
+        }
+
+        messageBox.style.display = "block"; // Tampilkan pesan
+      }
+
+      // Fungsi untuk mengubah tampilan Presensi (Status vs Input)
+      function switchPresensiView(view, clickedTab) {
+        document.getElementById("presensi-status-view").style.display = "none";
+        document.getElementById("presensi-input-view").style.display = "none";
+
+        document.getElementById("tab-status").classList.remove("active-tab");
+        document.getElementById("tab-input").classList.remove("active-tab");
+
+        if (view === "status") {
+          document.getElementById("presensi-status-view").style.display =
+            "block";
+          document.getElementById("tab-status").classList.add("active-tab");
+          document.getElementById("presensi-title").innerText =
+            "Status Kehadiran";
+        } else if (view === "input") {
+          document.getElementById("presensi-input-view").style.display =
+            "block";
+          document.getElementById("tab-input").classList.add("active-tab");
+          document.getElementById("presensi-title").innerText =
+            "Input Presensi";
+          // Pastikan dropdown terisi setiap kali pindah ke view input
+          populateMatkulOptions();
+          updatePresensiStatus(); // Cek status tombol
+        }
+      }
+    </script>
+  </body>
+</html>
