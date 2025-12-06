@@ -43,6 +43,42 @@
         overflow-y: auto;
       }
 
+      /* --- NEW: SPLASH SCREEN STYLES --- */
+      #splash-screen {
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        height: 100vh;
+        max-width: 414px;
+        background-color: var(--primary); /* Warna biru IPB */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        color: white;
+        opacity: 1;
+        transition: opacity 0.5s ease-out;
+      }
+      #splash-screen h1 {
+        font-size: 24px;
+        margin-top: 10px;
+        font-weight: 700;
+        color: white;
+      }
+      #splash-screen i {
+        font-size: 50px;
+      }
+      /* NEW: Class untuk menyembunyikan konten utama di awal */
+      .initial-hidden {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in;
+      }
+      /* --- END SPLASH SCREEN STYLES --- */
+
       /* --- Main App Container --- */
       .app-container {
         width: 100%;
@@ -255,7 +291,10 @@
         justify-content: center;
         color: var(--primary);
         font-weight: 700;
-        font-size: 14px;
+        font-size: 12px;
+        text-align: center; /* penting */
+        line-height: 13px; /* biar tidak terlalu renggang */
+        flex-direction: column; /* ini yang bikin rapi */
         flex-shrink: 0;
       }
 
@@ -617,27 +656,41 @@
     </style>
   </head>
   <body>
-    <div class="app-container">
+    <div id="splash-screen">
+      <i class="fas fa-graduation-cap"></i>
+      <h1>SIAKAD Mobile</h1>
+      <p
+        style="
+          margin-top: 5px;
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.8);
+        "
+      >
+        SIAKAD Akademik Indonesia
+      </p>
+    </div>
+
+    <div class="app-container initial-hidden">
       <div class="content-scrollable">
-        <!-- ============================================== -->
-        <!-- SCREEN: HOME (Updated with onclick handlers) -->
-        <!-- ============================================== -->
         <div id="home" class="screen active">
           <div class="wrapper" style="padding-top: 25px">
             <div class="profile-header">
               <div class="profile-info">
-                <p>1301100310 - Sistem Informasi</p>
-                <h1>
-                  Hai, Sarah Firjani Hanisah
+                <p>Institut Pertanian Bogor</p>
+                <p>J1301100310-Teknik Informatika</p>
+                <h3>
+                  Hai,Gede Wicaksono
                   <img
                     src="https://em-content.zobj.net/source/microsoft-teams/337/waving-hand_1f44b.png"
                     width="18"
                   />
-                </h1>
+                </h3>
               </div>
               <div class="avatar">
-                <!-- Image placeholder, since no external assets are allowed -->
-                <img src="https://image.idntimes.com/post/20240716/foto-cover-01792b24cc842961bce6d5fc3b376394.jpg" alt="Profile" />
+                <img
+                  src="https://github.com/hostingplace/image/blob/main/wicak-mahasiswa.jpeg?raw=true"
+                  alt="Profile"
+                />
               </div>
             </div>
 
@@ -648,7 +701,7 @@
                   Semester Lima
                 </p>
                 <h1>
-                  3.82
+                  3.21
                   <span style="font-size: 14px"
                     ><i class="fas fa-arrow-up"></i
                   ></span>
@@ -678,7 +731,6 @@
                 <div class="icon-box"><i class="fas fa-book"></i></div>
                 <span>Repositori</span>
               </div>
-              <!-- Updated Presensi to go to the main Presensi screen -->
               <div class="menu-item" onclick="switchTab('presensi', this)">
                 <div class="icon-box"><i class="far fa-check-square"></i></div>
                 <span>Presensi</span>
@@ -705,7 +757,7 @@
 
             <h3>Jadwal Hari Ini</h3>
             <div class="schedule-card">
-              <div class="time-badge">8.30</div>
+              <div class="time-badge">8.30-11.00</div>
               <div class="class-info">
                 <h4>Sistem Operasi</h4>
                 <p><i class="fas fa-map-marker-alt"></i> Ruang AM 201</p>
@@ -731,10 +783,6 @@
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- SCREEN: BERITA -->
-        <!-- ... (Konten lainnya tetap sama) ... -->
-        <!-- ============================================== -->
         <div id="berita" class="screen">
           <div class="header header-center">
             <h2>Berita</h2>
@@ -829,10 +877,6 @@
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- SCREEN: HASIL STUDI -->
-        <!-- ... (Konten lainnya tetap sama) ... -->
-        <!-- ============================================== -->
         <div id="hasil" class="screen">
           <div class="header header-center">
             <h2>Hasil Studi</h2>
@@ -863,6 +907,9 @@
               >
                 <option>Semester 5</option>
                 <option>Semester 4</option>
+                <option>Semester 3</option>
+                <option>Semester 2</option>
+                <option>Semester 1</option>
               </select>
             </div>
 
@@ -909,7 +956,7 @@
                   <h4 style="margin-bottom: 10px">Keterangan Studi</h4>
                   <p style="font-size: 13px; color: #333; margin-bottom: 5px">
                     Total SKS
-                    <span style="float: right; font-weight: bold">120</span>
+                    <span style="float: right; font-weight: bold">112</span>
                   </p>
                   <p style="font-size: 13px; color: #333; margin-bottom: 5px">
                     Total Semester
@@ -936,10 +983,6 @@
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- SCREEN: JADWAL AKADEMIK -->
-        <!-- ... (Konten lainnya tetap sama) ... -->
-        <!-- ============================================== -->
         <div id="jadwal" class="screen">
           <div class="header header-center">
             <h2>Jadwal Akademik</h2>
@@ -987,27 +1030,21 @@
               </div>
             </div>
 
-            <h3 id="schedule-title">Jadwal Kuliah (Senin)</h3>
-
+            <h3 id="schedule-title">Jadwal Kuliah: Senin, 13 Nov</h3>
             <div id="schedule-content"></div>
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- NEW SCREEN: 1. KALENDER AKADEMIK -->
-        <!-- ... (Konten lainnya tetap sama) ... -->
-        <!-- ============================================== -->
         <div id="kalender" class="screen">
           <div class="header header-center">
             <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
             <h2>Kalender Akademik</h2>
           </div>
           <div class="wrapper">
-            <h3>November 2025</h3>
+            <h3>Desember 2025</h3>
             <div style="text-align: center; margin-bottom: 20px">
-              <!-- Placeholder for a simple calendar graphic -->
               <img
-                src="https://placehold.co/300x200/f0f4f8/888?text=Kalender+Sederhana"
+                src="https://placehold.co/300x200/f0f4f8/888?text=Belum+Diterbitkan+Instansi"
                 alt="Kalender"
                 style="border-radius: 10px"
               />
@@ -1016,34 +1053,30 @@
             <h3>Agenda Penting</h3>
             <div class="schedule-card" style="border-left: 5px solid #ffc107">
               <div class="class-info">
-                <h4>Batas Akhir Pembayaran UKT</h4>
-                <p><i class="far fa-calendar-alt"></i> 25 November 2025</p>
+                <h4>Libur Natal 2025</h4>
+                <p><i class="far fa-calendar-alt"></i> 22 Desember 2025</p>
                 <p>
                   <i
-                    class="fas fa-exclamation-triangle"
-                    style="color: #ffc107"
+                    class="fas fa-info-circle"
+                    style="color: green"
                   ></i>
-                  Wajib bayar untuk registrasi semester ganjil.
+                  Informasi lebih lanjut dalam Kalender Akademik 
                 </p>
               </div>
             </div>
             <div class="schedule-card" style="border-left: 5px solid #28a745">
               <div class="class-info">
-                <h4>Pengumuman Beasiswa PPA</h4>
-                <p><i class="far fa-calendar-alt"></i> 1 Desember 2025</p>
+                <h4>Pengumuman Hasil Seminar Proposal</h4>
+                <p><i class="far fa-calendar-alt"></i> 1 Desember-14 Desember 2025</p>
                 <p>
                   <i class="fas fa-info-circle" style="color: #28a745"></i> Cek
-                  laman berita kampus untuk detail penerima.
+                  laman berita kampus untuk lebih detail
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- NEW SCREEN: 2. PESAN -->
-        <!-- ... (Konten lainnya tetap sama) ... -->
-        <!-- ============================================== -->
         <div id="pesan" class="screen">
           <div class="header header-center">
             <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
@@ -1083,74 +1116,38 @@
 
             <h3>Arsip Pesan</h3>
             <div class="message-item">
-              <h4
-                style="
-                  font-size: 14px;
-                  font-weight: 600;
-                  color: #555;
-                  margin-bottom: 5px;
-                "
-              >
-                Admin Akademik
+              <h4 style="font-size: 14px; margin-bottom: 5px">
+                Biro Administrasi Akademik
               </h4>
-              <p style="color: #888">
-                Peringatan KHS: Cek hasil studi semester genap.
+              <p>
+                Pengumuman: Revisi jadwal UAS untuk Mata Kuliah Pemrograman Web
+                Lanjut...
               </p>
-              <p
-                style="
-                  font-size: 10px;
-                  margin-top: 5px;
-                  float: right;
-                  color: #888;
-                "
-              >
-                20/07/2025
+              <p style="font-size: 10px; margin-top: 5px; float: right">
+                Kemarin
               </p>
             </div>
             <div class="message-item">
-              <h4
-                style="
-                  font-size: 14px;
-                  font-weight: 600;
-                  color: #555;
-                  margin-bottom: 5px;
-                "
-              >
-                Pengelola UKT
+              <h4 style="font-size: 14px; margin-bottom: 5px">
+                Dr. Asep Taufik (Dosen SO)
               </h4>
-              <p style="color: #888">
-                Tagihan UKT: Pembayaran sudah dikonfirmasi.
+              <p>
+                Materi kuliah Modul 5 sudah diunggah. Silakan cek repositori.
               </p>
-              <p
-                style="
-                  font-size: 10px;
-                  margin-top: 5px;
-                  float: right;
-                  color: #888;
-                "
-              >
-                10/01/2025
+              <p style="font-size: 10px; margin-top: 5px; float: right">
+                5 Hari Lalu
               </p>
             </div>
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- NEW SCREEN: 3. REPOSITORI -->
-        <!-- ... (Konten lainnya tetap sama) ... -->
-        <!-- ============================================== -->
         <div id="repositori" class="screen">
           <div class="header header-center">
             <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
             <h2>Repositori Materi</h2>
-            <i class="fas fa-cloud-download-alt"></i>
+            <i class="fas fa-plus-circle"></i>
           </div>
           <div class="wrapper">
-            <div class="search-bar">
-              <i class="fas fa-search" style="color: #ccc"></i>
-              <input type="text" placeholder="Cari Mata Kuliah atau File..." />
-            </div>
-
             <h3>Semester 5 (Ganjil)</h3>
             <div class="repo-item">
               <i class="fas fa-folder"></i>
@@ -1171,7 +1168,7 @@
               </div>
             </div>
 
-            <h3>Semester 4 (Genap)</h3>
+            <h3 style="margin-top: 30px">Semester 4 (Genap)</h3>
             <div class="repo-item">
               <i class="fas fa-folder"></i>
               <div>
@@ -1184,9 +1181,6 @@
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- NEW SCREEN: 4. PRESENSI (Main Switch Screen) -->
-        <!-- ============================================== -->
         <div id="presensi" class="screen">
           <div class="header header-center">
             <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
@@ -1197,7 +1191,6 @@
             ></i>
           </div>
           <div class="wrapper">
-            <!-- Tabs to switch between Status and Input -->
             <div class="tabs">
               <div
                 id="tab-status"
@@ -1215,7 +1208,6 @@
               </div>
             </div>
 
-            <!-- 4A. STATUS PRESENSI VIEW (Default) -->
             <div id="presensi-status-view">
               <h3>Semester Berjalan (Ganjil 2025)</h3>
               <table class="grades-table" style="font-size: 13px">
@@ -1258,7 +1250,7 @@
                     </td>
                   </tr>
                   <tr>
-                    <td>Organisasi Komputer</td>
+                    <td>Basis Data Lanjut</td>
                     <td style="text-align: center">2x</td>
                     <td
                       style="
@@ -1270,44 +1262,19 @@
                       75%
                     </td>
                   </tr>
-                  <tr>
-                    <td>Basis Data Lanjut</td>
-                    <td style="text-align: center">0x</td>
-                    <td
-                      style="
-                        text-align: center;
-                        color: #28a745;
-                        font-weight: 700;
-                      "
-                    >
-                      100%
-                    </td>
-                  </tr>
                 </tbody>
               </table>
-              <div
-                class="summary-card"
-                style="
-                  margin-top: 15px;
-                  background: #fce4ec;
-                  border: 1px solid #dc3545;
-                "
-              >
-                <p style="font-size: 11px; color: #dc3545; font-weight: 600">
-                  <i class="fas fa-exclamation-circle"></i> Perhatian:
-                  Organisasi Komputer di bawah batas minimum (80%). Hubungi
-                  Dosen segera.
+
+              <div class="summary-card">
+                <p style="font-size: 13px">
+                  **Keterangan:** Kehadiran minimal untuk UAS adalah **80%**.
+                  Anda wajib memantau status presensi Anda.
                 </p>
               </div>
             </div>
 
-            <!-- 4B. INPUT PRESENSI VIEW (Hidden by default) -->
             <div id="presensi-input-view" style="display: none">
-              <p style="margin-bottom: 20px">
-                Pilih mata kuliah yang sedang berlangsung dan masukkan kode
-                presensi 4 digit yang diberikan oleh Dosen.
-              </p>
-
+              <h3>Input Kehadiran Kuliah</h3>
               <form class="presensi-form" onsubmit="submitPresensi(event)">
                 <label
                   style="
@@ -1316,17 +1283,12 @@
                     display: block;
                     margin-bottom: 5px;
                   "
-                  >Pilih Mata Kuliah</label
+                  >Pilih Jadwal</label
                 >
-                <select
-                  id="matkul-select"
-                  required
-                  onchange="updatePresensiStatus()"
-                >
+                <select id="matkul-select" required>
                   <option value="" disabled selected>
                     -- Pilih Jadwal Hari Ini --
                   </option>
-                  <!-- Opsi akan diisi oleh JavaScript berdasarkan jadwal hari ini -->
                 </select>
 
                 <label
@@ -1377,10 +1339,6 @@
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- NEW SCREEN: 5. UKT -->
-        <!-- ... (Konten lainnya tetap sama) ... -->
-        <!-- ============================================== -->
         <div id="ukt" class="screen">
           <div class="header header-center">
             <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
@@ -1388,7 +1346,7 @@
             <i class="fas fa-history"></i>
           </div>
           <div class="wrapper">
-            <h3>Tagihan Semester Ganjil 2025/2026</h3>
+            <h3>Semester Ganjil(Gasal)25/26</h3>
             <div class="ukt-box">
               <p style="font-size: 12px; color: #555">Kategori UKT</p>
               <h4
@@ -1399,28 +1357,28 @@
                   margin-bottom: 10px;
                 "
               >
-                UKT Golongan III
+               Golongan III
               </h4>
-
               <p style="font-size: 13px; color: #333; margin-bottom: 5px">
-                Jumlah Tagihan
+                Jumlah 
                 <span style="float: right; font-weight: bold"
-                  >Rp 5.500.000</span
+                  >Rp 4.600.000</span
                 >
               </p>
               <p style="font-size: 13px; color: #333; margin-bottom: 10px">
-                Batas Waktu Bayar
-                <span style="float: right; font-weight: bold; color: #dc3545"
-                  >25 Nov 2025</span
+                Jadwal Mulai Pembayaran
+                <span style="float: right; font-weight: bold; color: #333"
+                  >22 Jan 2025</span
                 >
               </p>
               <p style="font-size: 14px; font-weight: 700">
                 Status
                 <span class="ukt-status" style="float: right; color: #dc3545"
-                  >BELUM LUNAS</span
+                  >Belum Melakukan Pembayaran</span
                 >
               </p>
             </div>
+
             <button
               style="
                 width: 100%;
@@ -1433,46 +1391,48 @@
                 cursor: pointer;
               "
             >
-              Lakukan Pembayaran
+              Lakukan Pembayaran Online
             </button>
 
-            <h3 style="margin-top: 30px">Riwayat Pembayaran</h3>
-            <div
-              class="ukt-box"
-              style="
-                border-left: 5px solid #28a745;
-                margin-bottom: 10px;
-                background: #e8f5e9;
-              "
-            >
-              <p style="font-size: 14px; font-weight: 600; color: #333">
-                Semester Genap 2024/2025
+            <h3 style="margin-top: 30px">Info Pembayaran</h3>
+            <div class="ukt-box" style="border-left: 5px solid #00897b">
+              <p style="font-size: 12px; color: #555">Nomor Virtual Account</p>
+              <h4
+                style="
+                  font-size: 12px;
+                  font-weight: 700;
+                  color: #333;
+                  margin-bottom: 10px;
+                "
+              >
+                9000188820251031
+                Yayasan Pendidikan IPB
+              </h4>
+              
+              <p style="font-size: 13px; color: #333">
+                Bank Tujuan
+                <span style="float: right; font-weight: bold">BNI</span>
               </p>
-              <p style="font-size: 11px; color: #28a745">LUNAS (12 Jan 2025)</p>
             </div>
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- NEW SCREEN: 6. CATATAN -->
-        <!-- ... (Konten lainnya tetap sama) ... -->
-        <!-- ============================================== -->
         <div id="catatan" class="screen">
           <div class="header header-center">
             <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
             <h2>Catatan Kuliah</h2>
-            <i class="fas fa-plus-circle"></i>
+            <i class="fas fa-plus"></i>
           </div>
           <div class="wrapper">
             <h3>Catatan Terbaru</h3>
             <div class="notes-list">
               <div class="note-card">
-                <h4>Strategi Sistem</h4>
+                <h4>Sistem Operasi</h4>
                 <p>
-                  Draft bab 1 proposal skripsi sudah selesai, perlu revisi
-                  bagian landasan teori.
+                  Konsep Threading dan Multitasking: perbedaan dan implementasi
+                  di kernel.
                 </p>
-                <p style="margin-top: 10px">2 Jam Lalu</p>
+                <p style="margin-top: 10px">Hari Ini</p>
               </div>
               <div class="note-card" style="background: #e3f2fd">
                 <h4 style="color: #0d47a1">Basis Data Lanjut</h4>
@@ -1493,13 +1453,18 @@
                 <p style="font-size: 11px">10 Catatan</p>
               </div>
             </div>
+            <div class="repo-item" style="border-left: 5px solid #007bff">
+              <i class="far fa-sticky-note" style="color: #007bff"></i>
+              <div>
+                <h4 style="font-size: 14px; font-weight: 600; color: #333">
+                  Algoritma dan Struktur Data
+                </h4>
+                <p style="font-size: 11px">15 Catatan</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- NEW SCREEN: 7. TRANSKRIP -->
-        <!-- ... (Konten lainnya tetap sama) ... -->
-        <!-- ============================================== -->
         <div id="transkrip" class="screen">
           <div class="header header-center">
             <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
@@ -1517,6 +1482,7 @@
               <h1 style="font-size: 36px; font-weight: 700; color: #28a745">
                 3.21
               </h1>
+
               <div
                 class="tr-summary-line"
                 style="
@@ -1555,46 +1521,69 @@
                   <td style="text-align: center; font-weight: bold">B+</td>
                 </tr>
                 <tr>
+                  <td>Pemrograman Web Lanjut</td>
+                  <td style="text-align: center">3</td>
+                  <td style="text-align: center; font-weight: bold">A-</td>
+                </tr>
+                <tr>
                   <td>Sistem Operasi</td>
                   <td style="text-align: center">3</td>
-                  <td style="text-align: center; font-weight: bold">A</td>
+                  <td style="text-align: center; font-weight: bold">B+</td>
                 </tr>
                 <tr>
-                  <td>Statistika/Probabilitas</td>
-                  <td style="text-align: center">3</td>
-                  <td style="text-align: center; font-weight: bold">B</td>
-                </tr>
-                <tr>
-                  <td>Pemrograman Web</td>
+                  <td>Basis Data</td>
                   <td style="text-align: center">3</td>
                   <td style="text-align: center; font-weight: bold">A</td>
                 </tr>
-                <!-- Dst. -->
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- NEW SCREEN: 8. LAINNYA (Placeholder) -->
-        <!-- ... (Konten lainnya tetap sama) ... -->
-        <!-- ============================================== -->
         <div id="lainnya" class="screen">
           <div class="header header-center">
             <i class="fas fa-arrow-left" onclick="switchTab('home', this)"></i>
-            <h2>Fitur Lainnya</h2>
+            <h2>Menu Lainnya</h2>
           </div>
           <div class="wrapper">
-            <p style="font-size: 14px; color: #333">
-              Halaman ini akan berisi menu-menu tambahan seperti Pengaturan
-              Akun, Bantuan, Logout, dan Informasi Kampus Lainnya.
-            </p>
-            <div style="margin-top: 20px; text-align: center; color: #ccc">
-              <i
-                class="fas fa-wrench"
-                style="font-size: 40px; margin-bottom: 10px; color: #ddd"
-              ></i>
-              <p>Dalam Pengembangan</p>
+            <div class="repo-item">
+              <i class="fas fa-id-card"></i>
+              <div>
+                <h4 style="font-size: 14px; font-weight: 600; color: #333">
+                  Kartu Rencana Studi (KRS)
+                </h4>
+                <p style="font-size: 11px">Cek mata kuliah yang terdaftar</p>
+              </div>
+            </div>
+            <div class="repo-item">
+              <i class="fas fa-graduation-cap"></i>
+              <div>
+                <h4 style="font-size: 14px; font-weight: 600; color: #333">
+                  Pendaftaran Wisuda
+                </h4>
+                <p style="font-size: 11px">Informasi dan Syarat Kelulusan</p>
+              </div>
+            </div>
+            <div class="repo-item">
+              <i class="fas fa-user-shield"></i>
+              <div>
+                <h4 style="font-size: 14px; font-weight: 600; color: #333">
+                  Ganti Password
+                </h4>
+                <p style="font-size: 11px">Ubah kata sandi akun Anda</p>
+              </div>
+            </div>
+            <div class="repo-item">
+              <i class="fas fa-sign-out-alt" style="color: #dc3545"></i>
+              <div>
+                <h4
+                  style="font-size: 14px; font-weight: 600; color: #dc3545"
+                  onclick="alert('Anda telah keluar.')"
+                >
+                  Keluar Akun
+                </h4>
+                <p style="font-size: 11px">Log out dari aplikasi</p>
+              </div>
             </div>
           </div>
         </div>
@@ -1602,7 +1591,7 @@
       <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('home', this)">
           <i class="fas fa-home"></i>
-          <span>Home</span>
+          <span>Beranda</span>
         </div>
         <div class="nav-item" onclick="switchTab('berita', this)">
           <i class="far fa-newspaper"></i>
@@ -1620,42 +1609,46 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script>
       // Data dummy jadwal hari ini (Senin) untuk keperluan Input Presensi
       const todaySchedule = [
         {
-          id: "so",
-          matkul: "Sistem Operasi",
-          time: "08.30",
+          id: "1TALG-D",
+          matkul: "Algoritma dan Pemrograman",
+          time: "08.30-10.10",
           code: "1357",
-          room: "AM 201",
         },
         {
           id: "ss",
           matkul: "Strategi Sistem",
-          time: "11.00",
           code: "2468",
-          room: "AM 201",
+          room: "A201",
         },
-        // Tambahkan mata kuliah lain yang sedang berlangsung jika hari ini bukan Senin
+        {
+          id: "OAK",
+          matkul: "Organisasi dan Arsitektur Komputer",
+          time: "9.20-11.00",
+          code: "1122",
+          room: "B102",
+        },
       ];
 
       // --- 1. Navigation Logic ---
       function switchTab(screenId, clickedElement) {
         const screens = document.querySelectorAll(".screen");
         screens.forEach((screen) => screen.classList.remove("active"));
-
         document.getElementById(screenId).classList.add("active");
 
         const navItems = document.querySelectorAll(".nav-item");
         const isBottomNavClick =
           clickedElement && clickedElement.classList.contains("nav-item");
 
+        // Logic untuk Bottom Nav
         if (isBottomNavClick) {
           navItems.forEach((item) => item.classList.remove("active"));
           clickedElement.classList.add("active");
         } else {
+          // Jika klik dari menu grid, pastikan bottom nav 'Beranda' tetap aktif
           navItems.forEach((item) => item.classList.remove("active"));
           const homeNav = document.querySelector(
             ".nav-item[onclick*=\"switchTab('home')\"]"
@@ -1663,11 +1656,14 @@
           if (homeNav) homeNav.classList.add("active");
         }
 
+        // Gulir ke atas
         document.querySelector(".content-scrollable").scrollTop = 0;
 
+        // Panggil fungsi render khusus jika pindah ke jadwal
         if (screenId === "jadwal") {
           renderScheduleContent();
         }
+        // Panggil fungsi inisialisasi presensi
         if (screenId === "presensi") {
           // Set default view to status when navigating to Presensi screen
           switchPresensiView("status");
@@ -1694,7 +1690,7 @@
               borderWidth: 2,
               pointBackgroundColor: "#fff",
               pointBorderColor: "#007bff",
-              pointRadius: 4,
+              pointRadius: 5,
               fill: true,
               tension: 0.4,
             },
@@ -1703,43 +1699,67 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return "IP: " + context.parsed.y.toFixed(2);
+                },
+              },
+            },
+          },
           scales: {
-            y: { beginAtZero: true, max: 4.0, grid: { borderDash: [5, 5] } },
-            x: { grid: { display: false } },
+            x: {
+              grid: {
+                display: false,
+              },
+            },
+            y: {
+              min: 0,
+              max: 4.0,
+              ticks: {
+                stepSize: 1.0,
+              },
+              border: {
+                display: false,
+              },
+            },
           },
         },
       });
 
-      // --- 3. SCHEDULE LOGIC (Sama seperti sebelumnya) ---
+      // --- 3. SCHEDULE LOGIC (JADWAL) ---
       const scheduleData = {
         kuliah: {
           senin: [
             {
-              time: "08.30",
-              matkul: "Sistem Operasi",
-              room: "Ruang AM 201",
-              dosen: "Dosen Asep Taufik, S.T., M.T.I",
+              time: "7.30 -9.10",
+              matkul: "Pengembangan Diri",
+              room: "Ruang A112",
+              dosen: "Dosen Salmiati, S.Kom, M.Kom",
             },
             {
-              time: "11.00",
-              matkul: "Strategi Sistem",
-              room: "Ruang AM 201",
-              dosen: "Dosen Maulana, S.T., M.T.I",
+              time: "9.20 -11.00",
+              matkul: "Organisasi dan Arsitektur Komputer",
+              room: "Ruang A103",
+              dosen: "Dosen Ir. Irsal, M.T",
+            },
+            {
+              time: "13.40 -15.20",
+              matkul: "Algoritma dan Pemrograman C++",
+              room: "Ruang A101",
+              dosen: "Dosen Salmiati, S.Kom, M.Kom",
             },
           ],
           selasa: [
             {
-              time: "09.00",
-              matkul: "Big Data",
-              room: "Lab Komputer 3",
-              dosen: "Dr. Budi Santoso, M.Kom",
-            },
-            {
-              time: "13.00",
-              matkul: "Keamanan Informasi",
-              room: "Ruang AM 302",
-              dosen: "Siti Aminah, M.Cs",
+              time: "10.00",
+              matkul: "Basis Data Lanjut",
+              room: "Lab Basis Data",
+              dosen: "Prof. Dr. Budiman",
             },
           ],
           rabu: [
@@ -1848,6 +1868,7 @@
         } else {
           scrollContainer.classList.add("hidden");
         }
+
         renderScheduleContent();
       }
 
@@ -1857,6 +1878,7 @@
           .querySelectorAll(".date-item")
           .forEach((d) => d.classList.remove("active-date"));
         el.classList.add("active-date");
+
         renderScheduleContent();
       }
 
@@ -1864,58 +1886,73 @@
         const container = document.getElementById("schedule-content");
         const titleEl = document.getElementById("schedule-title");
         let html = "";
+        const daysInIndonesian = {
+          senin: "Senin",
+          selasa: "Selasa",
+          rabu: "Rabu",
+          kamis: "Kamis",
+          jumat: "Jumat",
+        };
 
         if (currentCategory === "kuliah") {
-          titleEl.innerText = `Jadwal Kuliah (${
-            currentDay.charAt(0).toUpperCase() + currentDay.slice(1)
-          })`;
-          const classes = scheduleData.kuliah[currentDay];
-          if (classes && classes.length > 0) {
-            classes.forEach((c) => {
-              html += `
-                        <div class="schedule-card">
-                            <div class="time-badge">${c.time}</div>
-                            <div class="class-info">
-                                <h4>${c.matkul}</h4>
-                                <p><i class="fas fa-map-marker-alt"></i> ${c.room}</p>
-                                <p><i class="fas fa-user"></i> ${c.dosen}</p>
-                            </div>
-                        </div>`;
-            });
+          const schedule = scheduleData.kuliah[currentDay];
+          const dayName = daysInIndonesian[currentDay];
+          let dateNumber = document.querySelector(
+            `.date-item.active-date .date`
+          ).innerText;
+
+          titleEl.innerText = `Jadwal Kuliah: ${dayName}, ${dateNumber} Nov`;
+
+          if (schedule.length === 0) {
+            html = `<div class="empty-state">Tidak ada jadwal kuliah hari ini.</div>`;
           } else {
-            html =
-              '<div class="empty-state">Tidak ada jadwal kuliah hari ini.</div>';
+            schedule.forEach((item) => {
+              html += `
+              <div class="schedule-card">
+                <div class="time-badge">${item.time}</div>
+                <div class="class-info">
+                  <h4>${item.matkul}</h4>
+                  <p><i class="fas fa-map-marker-alt"></i> ${item.room}</p>
+                  <p><i class="fas fa-user"></i> ${item.dosen}</p>
+                </div>
+              </div>
+            `;
+            });
           }
         } else if (currentCategory === "tugas") {
-          titleEl.innerText = "Daftar Tugas Tertunda";
+          titleEl.innerText = "Daftar Tugas Aktif";
           scheduleData.tugas.forEach((t) => {
             html += `
-                    <div class="task-card">
-                        <h4>${t.matkul}</h4>
-                        <p style="font-size:13px; color:#333;">${t.title}</p>
-                        <p style="font-size:12px; color:#888; margin-top:5px;"><i class="far fa-clock"></i> Tenggat: ${t.deadline}</p>
-                        <button class="task-btn">Detail Tugas</button>
-                    </div>`;
+              <div class="task-card">
+                <h4>${t.matkul}</h4>
+                <p style="font-size:13px; color:#333;">${t.title}</p>
+                <p style="font-size:12px; color:#888; margin-top:5px;"><i class="far fa-clock"></i> Tenggat: ${t.deadline}</p>
+                <button class="task-btn">Detail Tugas</button>
+              </div>
+            `;
           });
         } else if (currentCategory === "ujian") {
           titleEl.innerText = "Jadwal UAS (Semester Gasal)";
           scheduleData.ujian.forEach((u) => {
             html += `
-                    <div class="schedule-card" style="border-left: 4px solid #dc3545;">
-                        <div class="class-info" style="width:100%">
-                            <div style="display:flex; justify-content:space-between;">
-                                <h4 style="color:#dc3545;">${u.matkul}</h4>
-                                <span style="font-size:10px; background:#ffebee; color:#dc3545; padding:3px 8px; border-radius:10px;">${u.type}</span>
-                            </div>
-                            <p style="margin-top:8px; font-weight:600;"><i class="far fa-calendar"></i> ${u.date}</p>
-                            <p><i class="far fa-clock"></i> ${u.time}</p>
-                        </div>
-                    </div>`;
+              <div class="schedule-card" style="border-left: 4px solid #dc3545;">
+                <div class="class-info" style="width:100%">
+                  <div style="display:flex; justify-content:space-between;">
+                      <h4 style="color:#dc3545;">${u.matkul}</h4>
+                      <span style="font-size:10px; background:#ffebee; color:#dc3545; padding:3px 8px; border-radius:10px;">${u.type}</span>
+                  </div>
+                  <p style="margin-top:8px; font-weight:600;"><i class="far fa-calendar"></i> ${u.date}</p>
+                  <p><i class="far fa-clock"></i> ${u.time}</p>
+                </div>
+              </div>
+            `;
           });
         }
+
         container.innerHTML = html;
       }
 
+      // Initial render for jadwal
       renderScheduleContent();
 
       // --- 4. PRESENSI LOGIC ---
@@ -1932,67 +1969,59 @@
             const option = document.createElement("option");
             option.value = sch.code; // Use code as value for easy lookup
             option.innerText = `${sch.matkul} (${sch.time} - ${sch.room})`;
-            option.setAttribute("data-matkul", sch.matkul);
+            option.setAttribute("data-matkul-id", sch.id);
             select.appendChild(option);
           });
-        } else {
-          const option = document.createElement("option");
-          option.value = "";
-          option.disabled = true;
-          option.innerText = "Tidak ada jadwal kuliah hari ini.";
-          select.appendChild(option);
-          document.getElementById("submit-presensi-btn").disabled = true;
         }
       }
 
-      // Fungsi untuk mengaktifkan/menonaktifkan tombol kirim
+      // Fungsi untuk mengecek status dan mengaktifkan tombol Kirim
       function updatePresensiStatus() {
-        const matkulSelected =
-          document.getElementById("matkul-select").value !== "";
+        const select = document.getElementById("matkul-select");
         const codeInput = document.getElementById("presensi-code");
         const submitBtn = document.getElementById("submit-presensi-btn");
 
-        // Mengaktifkan tombol jika mata kuliah terpilih dan kode memiliki 4 digit
+        const isMatkulSelected = select.value !== "";
         const isCodeValid = codeInput.value.length === 4;
-        submitBtn.disabled = !(matkulSelected && isCodeValid);
+
+        submitBtn.disabled = !(isMatkulSelected && isCodeValid);
       }
 
-      // Event listener untuk input kode
+      // Tambahkan event listener untuk update status tombol
+      document
+        .getElementById("matkul-select")
+        .addEventListener("change", updatePresensiStatus);
       document
         .getElementById("presensi-code")
         .addEventListener("input", updatePresensiStatus);
 
-      // Fungsi untuk menangani proses pengiriman presensi
+      // Fungsi untuk simulasi submit presensi
       function submitPresensi(event) {
-        event.preventDefault(); // Mencegah form reload page
+        event.preventDefault();
 
-        const matkulSelect = document.getElementById("matkul-select");
-        const presensiCodeInput = document.getElementById("presensi-code");
+        const select = document.getElementById("matkul-select");
+        const codeInput = document.getElementById("presensi-code");
         const messageBox = document.getElementById("presensi-message");
 
-        const selectedCode = matkulSelect.value;
-        const enteredCode = presensiCodeInput.value;
-        const selectedMatkul =
-          matkulSelect.options[matkulSelect.selectedIndex].getAttribute(
-            "data-matkul"
-          );
+        const selectedCode = select.value;
+        const enteredCode = codeInput.value;
 
-        messageBox.style.display = "none"; // Sembunyikan pesan lama
+        const selectedMatkul = todaySchedule.find(
+          (sch) => sch.code === selectedCode
+        );
+        const correctCode = selectedMatkul ? selectedMatkul.code : null;
 
-        // Simulasi Validasi Kode
-        if (enteredCode === selectedCode) {
-          // Kode Benar
-          messageBox.classList.remove("error");
+        messageBox.classList.remove("success", "error");
+        messageBox.style.display = "none";
+
+        if (enteredCode === correctCode) {
           messageBox.classList.add("success");
-          messageBox.innerHTML = `<i class="fas fa-check-circle"></i> **SUKSES!** Kehadiran untuk mata kuliah **${selectedMatkul}** berhasil direkam.`;
-
-          // Reset Form setelah sukses
-          matkulSelect.value = "";
-          presensiCodeInput.value = "";
-          updatePresensiStatus();
+          messageBox.innerHTML = `<i class="fas fa-check-circle"></i> **SUKSES!** Presensi untuk **${selectedMatkul.matkul}** berhasil direkam.`;
+          // Reset form setelah sukses
+          select.value = "";
+          codeInput.value = "";
+          updatePresensiStatus(); // Matikan tombol
         } else {
-          // Kode Salah
-          messageBox.classList.remove("success");
           messageBox.classList.add("error");
           messageBox.innerHTML = `<i class="fas fa-times-circle"></i> **GAGAL!** Kode presensi tidak valid. Cek kembali kode 4 digit Anda.`;
         }
@@ -2025,7 +2054,30 @@
           updatePresensiStatus(); // Cek status tombol
         }
       }
+
+      // --- NEW: SPLASH SCREEN LOGIC ---
+      window.addEventListener("DOMContentLoaded", function () {
+        const splash = document.getElementById("splash-screen");
+        const appContainer = document.querySelector(".app-container");
+
+        // The timeout set for the splash screen duration (2000ms = 2 seconds)
+        setTimeout(() => {
+          // 1. Fade out the splash screen
+          splash.style.opacity = "0";
+
+          // 2. Show the main app content (remove initial hidden state)
+          appContainer.classList.remove("initial-hidden");
+
+          // 3. Remove splash screen from DOM completely after fade-out transition is complete (500ms)
+          setTimeout(() => {
+            splash.style.display = "none";
+            // Ensure the application container is fully visible after splash is gone
+            appContainer.style.opacity = "1";
+            appContainer.style.visibility = "visible";
+          }, 500);
+        }, 1000); // Display splash screen for 2 seconds
+      });
+      // --- END SPLASH SCREEN LOGIC ---
     </script>
   </body>
 </html>
-
