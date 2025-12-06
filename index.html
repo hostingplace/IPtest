@@ -39,7 +39,8 @@
         display: flex;
         justify-content: center;
         height: 100vh; /* Full viewport height */
-        overflow: hidden; /* Prevent body scroll */
+        overflow-x: hidden; /* Prevent body scroll */
+        overflow-y: auto;
       }
 
       /* --- Main App Container --- */
@@ -57,12 +58,15 @@
       /* --- Scrollable Content Area --- */
       /* Ini adalah kunci agar konten bisa discroll tapi nav tetap diam */
       .content-scrollable {
-        flex: 1; /* Mengambil sisa ruang yang ada */
-        overflow-y: auto; /* Scroll vertikal aktif di area ini saja */
+        flex: 1;
+        overflow-y: auto;
         overflow-x: hidden;
         background: #fff;
         position: relative;
         scroll-behavior: smooth;
+
+        /* Tambahan penting */
+        padding-bottom: calc(var(--nav-height) + 2px);
       }
 
       /* Sembunyikan scrollbar tapi tetap bisa scroll (opsional, untuk estetika) */
@@ -575,17 +579,20 @@
 
       /* --- FIXED BOTTOM NAVIGATION --- */
       .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
         width: 100%;
+        max-width: 414px; /* mengikuti layout HP-mu */
         height: var(--nav-height);
         background: white;
         display: flex;
         justify-content: space-around;
         align-items: center;
         border-top: 1px solid #eee;
-        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05); /* Bayangan halus ke atas */
-
-        /* Sifat Fixed dalam Flexbox */
-        flex-shrink: 0; /* Jangan menyusut */
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        padding-bottom: env(safe-area-inset-bottom);
         z-index: 1000;
       }
 
@@ -934,7 +941,7 @@
         <!-- ... (Konten lainnya tetap sama) ... -->
         <!-- ============================================== -->
         <div id="jadwal" class="screen">
-          <div class="header">
+          <div class="header header-center">
             <h2>Jadwal Akademik</h2>
             <i class="fas fa-filter"></i>
           </div>
